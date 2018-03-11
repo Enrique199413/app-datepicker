@@ -139,6 +139,11 @@ Custom property | Description | Default
         height: 384px;
         max-height: 384px;
       }
+
+      .datepicker[noHeader] {
+        height: 270px;
+      }
+
       .datepicker.with-buttons {
         height: 431px;
         max-height: 431px;
@@ -648,22 +653,25 @@ Custom property | Description | Default
     </style>
 
     <div id="dp" class="datepicker">
-      <iron-selector class="selected-fulldate"
-        selected="{{_activeView}}"
-        attr-for-selected="view"
-        on-selected-changed="_onIronSelectorSelectedChanged"
-        fallback-selection="calendar">
-        <div id="showSelectedYear"
-          class="selected-year"
-          tabindex="0"
-          view="year"
-          aria-label="year view">
-          [[_showSelectedYear]]
-        </div>
-        <div class="selected-date" view="calendar" tabindex="0">
-          <div aria-label="calendar view">[[_shortSelectedDate]]</div>
-        </div>
-      </iron-selector>
+      <template is="dom-if" if="[[!hideHeader]]">
+        <iron-selector class="selected-fulldate"
+          selected="{{_activeView}}"
+          attr-for-selected="view"
+          on-selected-changed="_onIronSelectorSelectedChanged"
+          fallback-selection="calendar"
+          hidden="[[removeHeader]]">
+          <div id="showSelectedYear"
+            class="selected-year"
+            tabindex="0"
+            view="year"
+            aria-label="year view">
+            [[_showSelectedYear]]
+          </div>
+          <div class="selected-date" view="calendar" tabindex="0">
+            <div aria-label="calendar view">[[_shortSelectedDate]]</div>
+          </div>
+        </iron-selector>
+      </template>
 
       <neon-animated-pages class="fullcalendar"
         selected="[[_activeView]]"
@@ -874,6 +882,13 @@ Custom property | Description | Default
           type: Boolean,
           value: !1
         },
+        /**
+         * Hide header and only show calendar
+         */
+        hideHeader: {
+          type: Boolean,
+          value: false
+        },
 
         // Always reset selected date on dialog close. See https://github.com/motss/app-datepicker/issues/74.
         alwaysResetSelectedDateOnDialogClose: Boolean,
@@ -967,6 +982,7 @@ Custom property | Description | Default
         '_updateToReflectExternalChange(inputDate)',
         '_updateThemeColor(theme)',
         '_updateDatepickerView(view)',
+        '_updateHideHeader(hideHeader)',
         '_computeDaysOfWeek(firstDayOfWeek, locale)',
         '_computeActiveMonthYear(_activeYear, _activeMonth, locale)',
         '_computeShortSelectedDate(_selectedYear, _selectedMonth, _selectedDate, locale)',
@@ -1033,6 +1049,14 @@ Custom property | Description | Default
         }
 
         this.fire('app-datepicker-attached');
+      },
+
+      _updateHideHeader: function (isHide) {
+        if (isHide) {
+          this.$.dp.setAttribute('noHeader', '')
+        } else {
+          this.$.dp.removeAttribute('noHeader')
+        }
       },
 
       //  Month Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
