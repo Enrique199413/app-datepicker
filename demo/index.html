@@ -333,6 +333,13 @@
               </label>
               <paper-checkbox id="showLongDate" checked="{{showLongDate}}"></paper-checkbox>
             </div>
+            <div class="show-long-date">
+              <label for="hideHeader" class="flex">
+                Hide header
+                <div class=""></div>
+              </label>
+              <paper-checkbox id="hideHeader" checked="{{hideHeader}}"></paper-checkbox>
+            </div>
             <div class="auto-update-date">
               <label for="autoUpdateDate" class="flex">
                 Auto update date
@@ -358,6 +365,7 @@
               <app-datepicker id="common"
               theme="[[theme]]"
               view="{{view}}"
+              hide-header="[[hideHeader]]"
               first-day-of-week="[[firstDayOfWeek]]"
               disable-days="[[disableDays]]"
               disable-dates="[[disableDates]]"
